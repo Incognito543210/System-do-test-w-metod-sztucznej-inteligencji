@@ -1,0 +1,6 @@
+@System_do_testów_metod_sztucznej_inteligencji_HostAddress = http://localhost:5217
+
+GET {{System_do_testów_metod_sztucznej_inteligencji_HostAddress}}/weatherforecast/
+Accept: application/json
+
+###
