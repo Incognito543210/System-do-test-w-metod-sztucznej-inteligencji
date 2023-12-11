@@ -3,7 +3,17 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 17
 VisualStudioVersion = 17.8.34309.116
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "System do testów metod sztucznej inteligencji", "System do testów metod sztucznej inteligencji\System do testów metod sztucznej inteligencji.csproj", "{B91B4CDD-AB07-4C14-91BB-504DB998C54D}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "System do testów metod sztucznej inteligencji", "System do testów metod sztucznej inteligencji\System do testów metod sztucznej inteligencji.csproj", "{B91B4CDD-AB07-4C14-91BB-504DB998C54D}"
+	ProjectSection(ProjectDependencies) = postProject
+		{34E6B8C4-9964-4D82-967C-058687341731} = {34E6B8C4-9964-4D82-967C-058687341731}
+	EndProjectSection
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Model", "Model\Model.csproj", "{5272716F-7157-468A-9779-EEBAA27EF06F}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DAL", "DAL\DAL.csproj", "{34E6B8C4-9964-4D82-967C-058687341731}"
+	ProjectSection(ProjectDependencies) = postProject
+		{5272716F-7157-468A-9779-EEBAA27EF06F} = {5272716F-7157-468A-9779-EEBAA27EF06F}
+	EndProjectSection
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -15,6 +25,14 @@ Global
 		{B91B4CDD-AB07-4C14-91BB-504DB998C54D}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{B91B4CDD-AB07-4C14-91BB-504DB998C54D}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{B91B4CDD-AB07-4C14-91BB-504DB998C54D}.Release|Any CPU.Build.0 = Release|Any CPU
+		{5272716F-7157-468A-9779-EEBAA27EF06F}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{5272716F-7157-468A-9779-EEBAA27EF06F}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{5272716F-7157-468A-9779-EEBAA27EF06F}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{5272716F-7157-468A-9779-EEBAA27EF06F}.Release|Any CPU.Build.0 = Release|Any CPU
+		{34E6B8C4-9964-4D82-967C-058687341731}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{34E6B8C4-9964-4D82-967C-058687341731}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{34E6B8C4-9964-4D82-967C-058687341731}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{34E6B8C4-9964-4D82-967C-058687341731}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
