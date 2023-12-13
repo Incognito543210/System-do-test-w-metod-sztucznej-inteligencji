@@ -11,6 +11,7 @@ namespace DAL
         }
 
         public DbSet<ParamInfo> ParamaInfo { get; set; }
+        public DbSet<DllFiles> DllFiles { get; set; }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
