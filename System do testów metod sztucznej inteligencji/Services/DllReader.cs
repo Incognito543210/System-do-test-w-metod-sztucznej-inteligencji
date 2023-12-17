@@ -86,7 +86,7 @@ namespace System_do_testów_metod_sztucznej_inteligencji.Services
         public MethodInfo getMethodInfo(Type type)
         {
             MethodInfo[] methods = type.GetMethods(BindingFlags.Public | BindingFlags.Static | BindingFlags.Instance);
-            MethodInfo method = methods.FirstOrDefault(m => m.Name == "Solve");
+            MethodInfo method = methods.FirstOrDefault(m =S> m.Name == "Solve");
             return method;
         }
 
