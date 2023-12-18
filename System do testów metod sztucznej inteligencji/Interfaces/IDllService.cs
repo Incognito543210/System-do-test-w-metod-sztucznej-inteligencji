@@ -7,5 +7,6 @@ namespace System_do_testów_metod_sztucznej_inteligencji.Interfaces
         ICollection<DllFiles> GetFilePaths();
         public bool AddFolderPath(DllFiles dllFile, string path);
         bool PathExists(string folderPath);
+        DllFiles GetDllFile(int id);
     }
 }

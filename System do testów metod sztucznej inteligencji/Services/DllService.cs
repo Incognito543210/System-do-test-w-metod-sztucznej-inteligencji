@@ -1,5 +1,6 @@
 ﻿using DAL;
 using Model;
+using System.Xml.Linq;
 using System_do_testów_metod_sztucznej_inteligencji.Interfaces;
 
 namespace System_do_testów_metod_sztucznej_inteligencji.Services
@@ -25,6 +26,11 @@ namespace System_do_testów_metod_sztucznej_inteligencji.Services
             };
             _dataContext.Add(DllFiles);
             return Save();
+        }
+
+        public DllFiles GetDllFile(int id)
+        {
+            return _dataContext.DllFiles.Where(n => n.DllID== id).FirstOrDefault();
         }
 
         public ICollection<DllFiles> GetFilePaths()
