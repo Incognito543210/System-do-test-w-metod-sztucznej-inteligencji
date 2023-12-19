@@ -12,54 +12,59 @@ namespace System_do_testów_metod_sztucznej_inteligencji.Services
         {
             _dllService = dllService;
         }
-        //Run(Klasa która posiada funckję testową, nazwa funkcji, którą trzeba puścić, tablica obiektów z ParamsInfo podane przez użytkownika)
-        public void Run(int dllID, object targetClass, string testFunction, object[] parameters)
+        public void RunSolve(string dllName, fitnessFunction f, Type fitnessFunctionClass, string fitnessFunctionName, double[,] domain, params double[] parameters)
         {
-            DllFiles dllFile = _dllService.GetDllFile(dllID);
-            //Zmienić na pojedyńczą .dll
-            ClassObject = GetClassObject(dllFile.DllPath);
-            try
+            DllFiles dllFile = _dllService.GetAlgorithmDllFile(dllName);
+            if (dllFile.DllType == "Algorytm")
             {
-                //filePath = _dllService.GetType()
-                Assembly assembly = getAssembly(dllFile.DllPath);
-                Type[] types = getTypes(assembly);
-                string namespaceName = getNamespaceName(types);
-                foreach (Type type in types)
+                CreateClassObject(dllFile.DllPath);
+                try
                 {
-                    if (type.GetInterfaces().Any(t => t.Name == "IOptimizationAlgorithm"))
+                    Assembly assembly = Assembly.LoadFrom(dllFile.DllPath);
+                    Type[] types = assembly.GetTypes();
+                    foreach (Type type in types)
                     {
-                        MethodInfo solveMethod = getMethodInfo(type);
-                        Delegate @delegate = CreateDelegate(namespaceName, targetClass, testFunction, assembly);
-                        object[] _parameters = new object[parameters.Length + 1];
-                        _parameters[0] = @delegate;
-                        for (int i = 0; i < parameters.Length; i++)
+                        if (type.GetInterfaces().Any(t => t.Name == "IOptimizationAlgorithm"))
                         {
-                            _parameters[i + 1] = parameters[i];
+                            MethodInfo[] methods = type.GetMethods(BindingFlags.Public | BindingFlags.Static | BindingFlags.Instance);
+                            MethodInfo method = methods.FirstOrDefault(m => m.Name == "Solve");
+                            string namespaceName = type.Namespace;
+                            Type delegateType = assembly.GetType(namespaceName + ".fitnessFunction");
+                            Delegate _delegate = Delegate.CreateDelegate(delegateType, fitnessFunctionClass, fitnessFunctionName);
+                            object obj = Activator.CreateInstance(type);
+                            method?.Invoke(obj, new object[] { _delegate, domain, parameters });
                         }
-
-                        ClassObject = Activator.CreateInstance(type);
-
-                        RunSolve(solveMethod, _parameters);
-
                     }
                 }
+                catch (Exception ex)
+                {
+                    Console.WriteLine("Błąd: " + ex);
+                }
             }
-            catch (Exception ex)
+            else
             {
-                Console.WriteLine("Błąd: " + ex);
+                throw new Exception("Podany plik dll nie jest algorytmem!");
             }
         }
-        public object GetClassObject(string filePath)
+        private void CreateClassObject(string AlgorithName)
         {
-            //tu też
+            string dllPath;
+            if (_dllService.AlgorithmExists(AlgorithName))
+            {
+                dllPath = _dllService.GetAlgorithmDllFile(AlgorithName).DllPath;
+            }
+            else
+            {
+                throw new Exception("Taki algorytm nie istnieje!");
+            }
             try
             {
-                Assembly assembly = getAssembly(filePath);
-                Type[] types = getTypes(assembly);
+                Assembly assembly = Assembly.LoadFrom(dllPath);
+                Type[] types = assembly.GetTypes();
                 foreach (Type type in types)
                 {
                     if (type.GetInterfaces().Any(t => t.Name == "IOptimizationAlgorithm"))
-                        return Activator.CreateInstance(type);
+                        ClassObject = Activator.CreateInstance(type);
                 }
             }
             catch (Exception ex)
@@ -68,38 +73,14 @@ namespace System_do_testów_metod_sztucznej_inteligencji.Services
             }
             throw new Exception("Brak klasy dziedziczącej po IOptimizationAlgorithm");
         }
-        private Delegate CreateDelegate(string namespaceName, object targetClass, string functionName, Assembly assembly)
+        public object GetClassObject()
         {
-            Type delegateType = assembly.GetType(namespaceName + ".fitnessFunction");
-            return Delegate.CreateDelegate(delegateType, targetClass, functionName);
-        }
-
-        private MethodInfo getMethodInfo(Type type)
-        {
-            MethodInfo[] methods = type.GetMethods(BindingFlags.Public | BindingFlags.Static | BindingFlags.Instance);
-            MethodInfo method = methods.FirstOrDefault(m =S> m.Name == "Solve");
-            return method;
-        }
-
-        private string getNamespaceName(Type[] types)
-        {
-            return types[0].Namespace;
-        }
-
-        private Type[] getTypes(Assembly assembly)
-        {
-            Type[] types = assembly.GetTypes();
-            return types;
-        }
-
-        private void RunSolve(MethodInfo method, object[] parameters)
-        {
-            method?.Invoke(ClassObject, parameters);
-        }
-
-        private Assembly getAssembly(string dllFilePath)
-        {
-            return Assembly.LoadFrom(dllFilePath);
+            if(ClassObject != null)
+                return ClassObject;
+            else
+            {
+                throw new Exception("Obiekt klasy nie istnieje!");
+            }
         }
     }
 }
