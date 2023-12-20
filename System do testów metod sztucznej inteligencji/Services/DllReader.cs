@@ -69,7 +69,7 @@ namespace System_do_testów_metod_sztucznej_inteligencji.Services
         public List<object> GetListOfTestFunction(string[] filePaths)
         {
             var list = new List<object>();
-            foreach(var filePath in filePaths)
+            foreach (var filePath in filePaths)
             {
                 list.Add(GetTestFunction(filePath));
             }
@@ -104,7 +104,7 @@ namespace System_do_testów_metod_sztucznej_inteligencji.Services
         }
         public object GetClassObject()
         {
-            if(ClassObject != null)
+            if (ClassObject != null)
                 return ClassObject;
             else
             {

@@ -6,10 +6,10 @@ namespace System_do_testów_metod_sztucznej_inteligencji.Controllers
 {
     [ApiController]
     [Route("Api/[controller]")]
-    public class DllController  : ControllerBase
+    public class DllController : ControllerBase
     {
         private readonly IDllService _dllService;
-        public DllController(IDllService dllService) 
+        public DllController(IDllService dllService)
         {
             _dllService = dllService;
         }
