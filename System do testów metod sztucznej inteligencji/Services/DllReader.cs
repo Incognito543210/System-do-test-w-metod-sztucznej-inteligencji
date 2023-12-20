@@ -12,7 +12,7 @@ namespace System_do_testów_metod_sztucznej_inteligencji.Services
         {
             _dllService = dllService;
         }
-        public void RunSolve(string dllName, fitnessFunction f, Type fitnessFunctionClass, string fitnessFunctionName, double[,] domain, params double[] parameters)
+        public void RunSolve(string dllName, List<object> testFunctions, double[,] domain, params double[] parameters)
         {
             DllFiles dllFile = _dllService.GetAlgorithmDllFile(dllName);
             if (dllFile.DllType == "Algorytm")
@@ -30,9 +30,12 @@ namespace System_do_testów_metod_sztucznej_inteligencji.Services
                             MethodInfo method = methods.FirstOrDefault(m => m.Name == "Solve");
                             string namespaceName = type.Namespace;
                             Type delegateType = assembly.GetType(namespaceName + ".fitnessFunction");
-                            Delegate _delegate = Delegate.CreateDelegate(delegateType, fitnessFunctionClass, fitnessFunctionName);
-                            object obj = Activator.CreateInstance(type);
-                            method?.Invoke(obj, new object[] { _delegate, domain, parameters });
+                            foreach (var testFunction in testFunctions)
+                            {
+                                var functionMethod = testFunctions.GetType().GetMethod("FunctionTest");
+                                Delegate _delegate = Delegate.CreateDelegate(delegateType, testFunction, functionMethod);
+                                method?.Invoke(ClassObject, new object[] { _delegate, domain, parameters });
+                            }
                         }
                     }
                 }
@@ -45,6 +48,32 @@ namespace System_do_testów_metod_sztucznej_inteligencji.Services
             {
                 throw new Exception("Podany plik dll nie jest algorytmem!");
             }
+        }
+
+        public object GetTestFunction(string functionName)
+        {
+            var filePath = _dllService.GetFunctionDllFile(functionName).DllPath;
+            object obj = null;
+            var assembly = Assembly.LoadFrom(filePath);
+            var types = assembly.GetTypes();
+            foreach (var type in types)
+            {
+                if (type.IsClass && type.Name == "TestFunction")
+                {
+                    var instance = Activator.CreateInstance(type);
+                    obj = instance;
+                }
+            }
+            return obj;
+        }
+        public List<object> GetListOfTestFunction(string[] filePaths)
+        {
+            var list = new List<object>();
+            foreach(var filePath in filePaths)
+            {
+                list.Add(GetTestFunction(filePath));
+            }
+            return list;
         }
         private void CreateClassObject(string AlgorithName)
         {
