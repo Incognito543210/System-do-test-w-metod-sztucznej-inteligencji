@@ -12,34 +12,30 @@ namespace System_do_testów_metod_sztucznej_inteligencji.Services
         {
             _dllService = dllService;
         }
-        public void Run(object targetClass, string testFunction, object[] parameters)
+        public void RunSolve(string dllName, List<object> testFunctions, double[,] domain, params double[] parameters)
         {
-            List<string> list = getFiles();
-            ClassObject = GetClassObject();
-            foreach (string file in list)
+            DllFiles dllFile = _dllService.GetAlgorithmDllFile(dllName);
+            if (dllFile.DllType == "Algorytm")
             {
+                CreateClassObject(dllFile.DllPath);
                 try
                 {
-                    Assembly assembly = getAssembly(file);
-                    Type[] types = getTypes(assembly);
-                    string namespaceName = getNamespaceName(types);
+                    Assembly assembly = Assembly.LoadFrom(dllFile.DllPath);
+                    Type[] types = assembly.GetTypes();
                     foreach (Type type in types)
                     {
                         if (type.GetInterfaces().Any(t => t.Name == "IOptimizationAlgorithm"))
                         {
-                            MethodInfo solveMethod = getMethodInfo(type);
-                            Delegate @delegate = CreateDelegate(namespaceName, targetClass, testFunction, assembly);
-                            object[] _parameters = new object[parameters.Length + 1];
-                            _parameters[0] = @delegate;
-                            for (int i = 0; i < parameters.Length; i++)
+                            MethodInfo[] methods = type.GetMethods(BindingFlags.Public | BindingFlags.Static | BindingFlags.Instance);
+                            MethodInfo method = methods.FirstOrDefault(m => m.Name == "Solve");
+                            string namespaceName = type.Namespace;
+                            Type delegateType = assembly.GetType(namespaceName + ".fitnessFunction");
+                            foreach (var testFunction in testFunctions)
                             {
-                                _parameters[i + 1] = parameters[i];
+                                var functionMethod = testFunctions.GetType().GetMethod("FunctionTest");
+                                Delegate _delegate = Delegate.CreateDelegate(delegateType, testFunction, functionMethod);
+                                method?.Invoke(ClassObject, new object[] { _delegate, domain, parameters });
                             }
-
-                            ClassObject = Activator.CreateInstance(type);
-
-                            RunSolve(solveMethod, _parameters);
-
                         }
                     }
                 }
@@ -48,72 +44,72 @@ namespace System_do_testów_metod_sztucznej_inteligencji.Services
                     Console.WriteLine("Błąd: " + ex);
                 }
             }
-        }
-        public object GetClassObject()
-        {
-            List<string> list = getFiles();
-            foreach (string file in list)
+            else
             {
-                try
+                throw new Exception("Podany plik dll nie jest algorytmem!");
+            }
+        }
+
+        public object GetTestFunction(string functionName)
+        {
+            var filePath = _dllService.GetFunctionDllFile(functionName).DllPath;
+            object obj = null;
+            var assembly = Assembly.LoadFrom(filePath);
+            var types = assembly.GetTypes();
+            foreach (var type in types)
+            {
+                if (type.IsClass && type.Name == "TestFunction")
                 {
-                    Assembly assembly = getAssembly(file);
-                    Type[] types = getTypes(assembly);
-                    foreach (Type type in types)
-                    {
-                        if (type.GetInterfaces().Any(t => t.Name == "IOptimizationAlgorithm"))
-                            return Activator.CreateInstance(type);
-                    }
+                    var instance = Activator.CreateInstance(type);
+                    obj = instance;
                 }
-                catch (Exception ex)
+            }
+            return obj;
+        }
+        public List<object> GetListOfTestFunction(string[] filePaths)
+        {
+            var list = new List<object>();
+            foreach(var filePath in filePaths)
+            {
+                list.Add(GetTestFunction(filePath));
+            }
+            return list;
+        }
+        private void CreateClassObject(string AlgorithName)
+        {
+            string dllPath;
+            if (_dllService.AlgorithmExists(AlgorithName))
+            {
+                dllPath = _dllService.GetAlgorithmDllFile(AlgorithName).DllPath;
+            }
+            else
+            {
+                throw new Exception("Taki algorytm nie istnieje!");
+            }
+            try
+            {
+                Assembly assembly = Assembly.LoadFrom(dllPath);
+                Type[] types = assembly.GetTypes();
+                foreach (Type type in types)
                 {
-                    throw new Exception("Błąd: " + ex);
+                    if (type.GetInterfaces().Any(t => t.Name == "IOptimizationAlgorithm"))
+                        ClassObject = Activator.CreateInstance(type);
                 }
+            }
+            catch (Exception ex)
+            {
+                throw new Exception("Błąd: " + ex);
             }
             throw new Exception("Brak klasy dziedziczącej po IOptimizationAlgorithm");
         }
-        private Delegate CreateDelegate(string namespaceName, object targetClass, string functionName, Assembly assembly)
+        public object GetClassObject()
         {
-            Type delegateType = assembly.GetType(namespaceName + ".fitnessFunction");
-            return Delegate.CreateDelegate(delegateType, targetClass, functionName);
-        }
-
-        private List<string> getFiles()
-        {
-            List<string> files = new List<string>();
-            ICollection<DllFiles> dllFiles = _dllService.GetFilePaths();
-            foreach (DllFiles dllFile in dllFiles)
+            if(ClassObject != null)
+                return ClassObject;
+            else
             {
-                files.Add(dllFile.DllPath);
+                throw new Exception("Obiekt klasy nie istnieje!");
             }
-            return files;
-        }
-
-        private MethodInfo getMethodInfo(Type type)
-        {
-            MethodInfo[] methods = type.GetMethods(BindingFlags.Public | BindingFlags.Static | BindingFlags.Instance);
-            MethodInfo method = methods.FirstOrDefault(m => m.Name == "Solve");
-            return method;
-        }
-
-        private string getNamespaceName(Type[] types)
-        {
-            return types[0].Namespace;
-        }
-
-        private Type[] getTypes(Assembly assembly)
-        {
-            Type[] types = assembly.GetTypes();
-            return types;
-        }
-
-        private void RunSolve(MethodInfo method, object[] parameters)
-        {
-            method?.Invoke(ClassObject, parameters);
-        }
-
-        private Assembly getAssembly(string dllFilePath)
-        {
-            return Assembly.LoadFrom(dllFilePath);
         }
     }
 }

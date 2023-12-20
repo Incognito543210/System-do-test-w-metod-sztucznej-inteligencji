@@ -27,10 +27,6 @@ namespace System_do_testów_metod_sztucznej_inteligencji.Controllers
             {
                 string fileName = Path.GetFileName(dllFile);
                 string destinationPath = Path.Combine(folderPath, fileName);
-                if (!_dllService.AddFolderPath(dllFiles, destinationPath))
-                {
-                    return StatusCode(500, "Something went wrong while trying to save");
-                }
             }
 
             return Ok("Received successfully");
