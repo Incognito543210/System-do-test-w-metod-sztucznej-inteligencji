@@ -14,7 +14,7 @@ namespace System_do_testów_metod_sztucznej_inteligencji.Services
         }
         public void RunSolve(string dllName, List<object> testFunctions, double[,] domain, params double[] parameters)
         {
-            DllFiles dllFile = _dllService.GetAlgorithmDllFile(dllName);
+            DllFile dllFile = _dllService.GetAlgorithmDllFile(dllName);
             if (dllFile.DllType == "Algorytm")
             {
                 CreateClassObject(dllFile.DllPath);
@@ -75,7 +75,7 @@ namespace System_do_testów_metod_sztucznej_inteligencji.Services
             }
             return list;
         }
-        private void CreateClassObject(string AlgorithName)
+        public void CreateClassObject(string AlgorithName)
         {
             string dllPath;
             if (_dllService.AlgorithmExists(AlgorithName))

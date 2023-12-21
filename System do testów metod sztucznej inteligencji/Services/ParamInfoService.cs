@@ -7,20 +7,32 @@ namespace System_do_testów_metod_sztucznej_inteligencji.Services
     public class ParamInfoService : IParamInfoService
     {
         private readonly DataContext _context;
+        private DllReader _dllReader;
 
-        public ParamInfoService(DataContext context)
+        public ParamInfoService(DataContext context, DllReader dllReader)
         {
             _context = context;
+            _dllReader = dllReader;
         }
 
-        public ParamInfo GetParamInfo(string name)
-        {
-            return _context.ParamaInfo.Where(n => n.Name.Trim().ToLower() == name.Trim().ToLower()).FirstOrDefault();
-        }
+       // public ParamInfo GetParamsInfo(string name)
+      //  {
+       //     _dllReader.CreateClassObject("HarrisHawks");
 
-        public bool ParamInfoExist(string name)
-        {
-            return _context.ParamaInfo.Any(n => n.Name.Trim().ToLower() == name.Trim().ToLower());
-        }
+        //    var algorithmObject = _dllReader.GetClassObject;
+
+//_dllReader.ClassObject = algorithmObject;
+
+      //      algorithmObject.
+            
+
+      //  }
+
+     
+
+
+
+
+
     }
 }

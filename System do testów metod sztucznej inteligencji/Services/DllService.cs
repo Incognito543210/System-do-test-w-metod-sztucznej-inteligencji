@@ -1,5 +1,6 @@
 ﻿using DAL;
 using Model;
+using System.Security.Cryptography;
 using System.Xml.Linq;
 using System_do_testów_metod_sztucznej_inteligencji.Interfaces;
 
@@ -13,53 +14,52 @@ namespace System_do_testów_metod_sztucznej_inteligencji.Services
             _dataContext = dataContext;
         }
 
-        public bool AddFolderPath(DllFiles dllFile, string path, string name, string type)
+        public bool CreateDllFile(DllFile dllFile)
         {
-            if (PathExists(path))
-            {
-                return false;
-            }
-            var DllFiles = new DllFiles()
-            {
-                DllID = dllFile.DllID,
-                DllPath = path,
-                DllName = name,
-                DllType = type
-            };
-            _dataContext.Add(DllFiles);
+            _dataContext.Add(dllFile);
             return Save();
         }
 
-        public DllFiles GetAlgorithmDllFile(string name)
+        public DllFile GetAlgorithmDllFile(string name)
         {
-            return _dataContext.DllFiles.Where(n => n.DllName == name && n.DllType == "Algorytm").FirstOrDefault();
+            return _dataContext.DllFiles.Where(n => n.DllName.ToLower().Trim() == name.ToLower().Trim() && n.DllType.ToLower().Trim() == "algorytm").FirstOrDefault();
         }
-        public DllFiles GetFunctionDllFile(string name)
+        public DllFile GetFunctionDllFile(string name)
         {
-            return _dataContext.DllFiles.Where(n => n.DllName == name && n.DllType == "Funkcja").FirstOrDefault();
-        }
-
-        public ICollection<DllFiles> GetAlgorithmFilePaths()
-        {
-            return _dataContext.DllFiles.Where(n => n.DllType == "Algorytm").OrderBy(x => x.DllID).ToList();
-        }
-        public ICollection<DllFiles> GetFunctionFilePaths()
-        {
-            return _dataContext.DllFiles.Where(n => n.DllType == "Funkcja").OrderBy(x => x.DllID).ToList();
+            return _dataContext.DllFiles.Where(n => n.DllName.ToLower().Trim() == name.ToLower().Trim() && n.DllType.ToLower().Trim() == "funkcja").FirstOrDefault();
         }
 
-        public bool PathExists(string filePath)
+        public ICollection<DllFile> GetAlgorithmFiles()
         {
-            return _dataContext.DllFiles.Any(p => p.DllPath == filePath);
+            return _dataContext.DllFiles.Where(n => n.DllType.ToLower().Trim() == "algorytm").OrderBy(x => x.DllID).ToList();
+        }
+        public ICollection<DllFile> GetFunctionFiles()
+        {
+            return _dataContext.DllFiles.Where(n => n.DllType.ToLower().Trim() == "funkcja").OrderBy(x => x.DllID).ToList();
+        }
+
+        public bool DllFileExist(string name)
+        {
+            return _dataContext.DllFiles.Any(p => p.DllName.ToLower().Trim() == name.ToLower().Trim()); 
         }
         public bool AlgorithmExists(string algorithm)
         {
-            return _dataContext.DllFiles.Any(n => n.DllName == algorithm && n.DllType == "Algorytm");
+            return _dataContext.DllFiles.Any(n => n.DllName.Trim().ToLower() == algorithm.Trim().ToLower() && n.DllType.Trim().ToLower() == "algorytm");
         }
         public bool Save()
         {
             var saved = _dataContext.SaveChanges();
             return saved > 0 ? true : false;
+        }
+
+        public bool AnyAlgorithmExist()
+        {
+            return _dataContext.DllFiles.Any(n =>  n.DllType.Trim().ToLower() == "algorytm");
+        }
+
+        public bool AnyFunctionExist()
+        {
+            return _dataContext.DllFiles.Any(n => n.DllType.Trim().ToLower() == "funkcja");
         }
     }
 }

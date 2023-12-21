@@ -14,6 +14,7 @@ builder.Services.AddSwaggerGen();
 
 
 builder.Services.AddScoped<IParamInfoService, ParamInfoService>();
+builder.Services.AddScoped<IDllService, DllService>();
 
 builder.Services.AddDbContext<DataContext>(opt =>
 {

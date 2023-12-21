@@ -2,7 +2,7 @@
 
 namespace Model
 {
-    public class DllFiles
+    public class DllFile
     {
         [Key]
         public int DllID { get; set; }

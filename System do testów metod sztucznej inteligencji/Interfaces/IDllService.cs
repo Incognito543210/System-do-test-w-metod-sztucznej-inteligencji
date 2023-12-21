@@ -4,12 +4,14 @@ namespace System_do_testów_metod_sztucznej_inteligencji.Interfaces
 {
     public interface IDllService
     {
-        public bool AddFolderPath(DllFiles dllFile, string path, string name, string type);
-        bool PathExists(string folderPath);
-        DllFiles GetAlgorithmDllFile(string name);
-        DllFiles GetFunctionDllFile(string name);
-        ICollection<DllFiles> GetAlgorithmFilePaths();
-        ICollection<DllFiles> GetFunctionFilePaths();
+         bool CreateDllFile(DllFile dllFile);
+         bool DllFileExist(string name);
+        DllFile GetAlgorithmDllFile(string name);
+        DllFile GetFunctionDllFile(string name);
+        ICollection<DllFile> GetAlgorithmFiles();
+         ICollection<DllFile> GetFunctionFiles();
         bool AlgorithmExists(string algorithm);
+        bool AnyAlgorithmExist();
+        bool AnyFunctionExist();
     }
 }
