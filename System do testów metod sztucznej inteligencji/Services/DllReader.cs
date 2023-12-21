@@ -7,7 +7,9 @@ namespace System_do_testów_metod_sztucznej_inteligencji.Services
     public class DllReader : IDllReader
     {
         IDllService _dllService;
-        public object ClassObject;
+        private object ClassObject;
+        private Type type;
+        private OptimizationAlgorithm optimizationAlgorithm;
         public DllReader(IDllService dllService)
         {
             _dllService = dllService;
@@ -21,22 +23,15 @@ namespace System_do_testów_metod_sztucznej_inteligencji.Services
                 try
                 {
                     Assembly assembly = Assembly.LoadFrom(dllFile.DllPath);
-                    Type[] types = assembly.GetTypes();
-                    foreach (Type type in types)
+                    MethodInfo[] methods = type.GetMethods(BindingFlags.Public | BindingFlags.Static | BindingFlags.Instance);
+                    MethodInfo method = methods.FirstOrDefault(m => m.Name == "Solve");
+                    string namespaceName = type.Namespace;
+                    Type delegateType = assembly.GetType(namespaceName + ".fitnessFunction");
+                    foreach (var testFunction in testFunctions)
                     {
-                        if (type.GetInterfaces().Any(t => t.Name == "IOptimizationAlgorithm"))
-                        {
-                            MethodInfo[] methods = type.GetMethods(BindingFlags.Public | BindingFlags.Static | BindingFlags.Instance);
-                            MethodInfo method = methods.FirstOrDefault(m => m.Name == "Solve");
-                            string namespaceName = type.Namespace;
-                            Type delegateType = assembly.GetType(namespaceName + ".fitnessFunction");
-                            foreach (var testFunction in testFunctions)
-                            {
-                                var functionMethod = testFunctions.GetType().GetMethod("FunctionTest");
-                                Delegate _delegate = Delegate.CreateDelegate(delegateType, testFunction, functionMethod);
-                                method?.Invoke(ClassObject, new object[] { _delegate, domain, parameters });
-                            }
-                        }
+                        var functionMethod = testFunctions.GetType().GetMethod("FunctionTest");
+                        Delegate _delegate = Delegate.CreateDelegate(delegateType, testFunction, functionMethod);
+                        method?.Invoke(ClassObject, new object[] { _delegate, domain, parameters });
                     }
                 }
                 catch (Exception ex)
@@ -94,6 +89,7 @@ namespace System_do_testów_metod_sztucznej_inteligencji.Services
                 {
                     if (type.GetInterfaces().Any(t => t.Name == "IOptimizationAlgorithm"))
                         ClassObject = Activator.CreateInstance(type);
+                    this.type = type;
                 }
             }
             catch (Exception ex)
@@ -105,7 +101,10 @@ namespace System_do_testów_metod_sztucznej_inteligencji.Services
         public object GetClassObject()
         {
             if (ClassObject != null)
-                return ClassObject;
+            {
+                optimizationAlgorithm = new OptimizationAlgorithm(ClassObject, type);
+                return optimizationAlgorithm;
+            }
             else
             {
                 throw new Exception("Obiekt klasy nie istnieje!");
