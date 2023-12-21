@@ -15,7 +15,7 @@ namespace System_do_testów_metod_sztucznej_inteligencji.Controllers
             _dllService = dllService;
         }
 
-        [HttpPost("AddAlgorithm")]
+        [HttpPost("AddDLLFile")]
         [ProducesResponseType(204)]
         [ProducesResponseType(500)]
         public IActionResult AddDllFile([FromBody] DllFile dllFilesCreate)
@@ -43,6 +43,8 @@ namespace System_do_testów_metod_sztucznej_inteligencji.Controllers
    
             return Ok("Received successfully");
         }
+
+  
 
 
         [HttpGet("algorithmList")]

@@ -8,5 +8,6 @@ namespace System_do_testów_metod_sztucznej_inteligencji.Interfaces
         public object GetClassObject();
         object GetTestFunction(string functionName);
         List<object> GetListOfTestFunction(string[] filePaths);
+        void CreateClassObject(string AlgorithName);
     }
 }

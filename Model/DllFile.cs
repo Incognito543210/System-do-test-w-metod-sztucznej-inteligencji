@@ -6,8 +6,8 @@ namespace Model
     {
         [Key]
         public int DllID { get; set; }
-        public string DllName { get; set; } = "";
-        public string DllPath { get; set; } = "";
-        public string DllType { get; set; } = "";
+        public string DllName { get; set; }
+        public string DllPath { get; set; }
+        public string DllType { get; set; }
     }
 }

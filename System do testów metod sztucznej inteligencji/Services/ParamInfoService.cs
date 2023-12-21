@@ -1,5 +1,6 @@
 ﻿using DAL;
 using Model;
+using System.Xml;
 using System_do_testów_metod_sztucznej_inteligencji.Interfaces;
 
 namespace System_do_testów_metod_sztucznej_inteligencji.Services
@@ -7,26 +8,21 @@ namespace System_do_testów_metod_sztucznej_inteligencji.Services
     public class ParamInfoService : IParamInfoService
     {
         private readonly DataContext _context;
-        private DllReader _dllReader;
+        private IDllReader _dllReader;
 
-        public ParamInfoService(DataContext context, DllReader dllReader)
+        public ParamInfoService(DataContext context, IDllReader dllReader)
         {
             _context = context;
             _dllReader = dllReader;
         }
 
-       // public ParamInfo GetParamsInfo(string name)
-      //  {
-       //     _dllReader.CreateClassObject("HarrisHawks");
-
-        //    var algorithmObject = _dllReader.GetClassObject;
-
-//_dllReader.ClassObject = algorithmObject;
-
-      //      algorithmObject.
-            
-
-      //  }
+       public ICollection< ParamInfo> GetParamsInfo(string name)
+        {
+            _dllReader.CreateClassObject(name);
+            var optimization = (OptimizationAlgorithm)_dllReader.GetClassObject();
+            ParamInfo[] paramInfo = optimization.ParamsInfo;
+            return paramInfo;
+        }
 
      
 

@@ -17,32 +17,33 @@ namespace System_do_testów_metod_sztucznej_inteligencji.Services
         public void RunSolve(string dllName, List<object> testFunctions, double[,] domain, params double[] parameters)
         {
             DllFile dllFile = _dllService.GetAlgorithmDllFile(dllName);
-            if (dllFile.DllType == "Algorytm")
+            if (dllFile.DllType == "algorytm")
             {
-                CreateClassObject(dllFile.DllPath);
+                CreateClassObject(dllFile.DllName);
                 try
                 {
                     Assembly assembly = Assembly.LoadFrom(dllFile.DllPath);
                     MethodInfo[] methods = type.GetMethods(BindingFlags.Public | BindingFlags.Static | BindingFlags.Instance);
-                    MethodInfo method = methods.FirstOrDefault(m => m.Name == "Solve");
+                    MethodInfo method = methods.FirstOrDefault(m => m.Name.ToLower().Trim() == "solve");
                     string namespaceName = type.Namespace;
                     Type delegateType = assembly.GetType(namespaceName + ".fitnessFunction");
                     foreach (var testFunction in testFunctions)
                     {
-                        var functionMethod = testFunctions.GetType().GetMethod("FunctionTest");
+                        var functionMethod = testFunction.GetType().GetMethod("FunctionTest");
                         Delegate _delegate = Delegate.CreateDelegate(delegateType, testFunction, functionMethod);
                         method?.Invoke(ClassObject, new object[] { _delegate, domain, parameters });
+                    
                     }
                 }
-                catch (Exception ex)
+               catch (Exception ex)
                 {
                     Console.WriteLine("Błąd: " + ex);
                 }
             }
-            else
+           else
             {
-                throw new Exception("Podany plik dll nie jest algorytmem!");
-            }
+               throw new Exception("Podany plik dll nie jest algorytmem!");
+           }
         }
 
         public object GetTestFunction(string functionName)
@@ -53,7 +54,7 @@ namespace System_do_testów_metod_sztucznej_inteligencji.Services
             var types = assembly.GetTypes();
             foreach (var type in types)
             {
-                if (type.IsClass && type.Name == "TestFunction")
+                if (type.IsClass && type.Name.ToLower().Trim() == "testfunction")
                 {
                     var instance = Activator.CreateInstance(type);
                     obj = instance;
@@ -87,16 +88,20 @@ namespace System_do_testów_metod_sztucznej_inteligencji.Services
                 Type[] types = assembly.GetTypes();
                 foreach (Type type in types)
                 {
-                    if (type.GetInterfaces().Any(t => t.Name == "IOptimizationAlgorithm"))
+                    if (type.GetInterfaces().Any(t => t.Name.ToLower().Trim() == "ioptimizationalgorithm"))
+                    {
                         ClassObject = Activator.CreateInstance(type);
-                    this.type = type;
+
+
+                        this.type = type;
+                    }
                 }
             }
             catch (Exception ex)
             {
                 throw new Exception("Błąd: " + ex);
             }
-            throw new Exception("Brak klasy dziedziczącej po IOptimizationAlgorithm");
+           
         }
         public object GetClassObject()
         {
