@@ -20,9 +20,8 @@ namespace System_do_testów_metod_sztucznej_inteligencji.Services
             listOfFunction.Add(kasia);
 
         
-            _dllReader.RunSolve(algoritmName,listOfFunction,domain,parametres);
 
-            _dllReader.CreateClassObject(algoritmName);
+            _dllReader.RunSolve(algoritmName,listOfFunction,domain,parametres);
             var optimization = (OptimizationAlgorithm)_dllReader.GetClassObject();
 
             var result = optimization.XBest;
