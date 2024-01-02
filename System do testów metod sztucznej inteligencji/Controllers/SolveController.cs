@@ -11,15 +11,18 @@ namespace System_do_testów_metod_sztucznej_inteligencji.Controllers
     {
 
         private readonly ISolveService _service;
+        private readonly IGenerateTextReport _generateTextReport;
+        private readonly IGeneratePDFReport _generatePDFReport;
 
 
-        public SolveController(ISolveService service)
+        public SolveController(ISolveService service, IGenerateTextReport generateTextReport, IGeneratePDFReport generatePDFReport)
         {
             _service = service;
-           
+            _generateTextReport = generateTextReport;
+            _generatePDFReport = generatePDFReport;
         }
 
-        [HttpPost("{algorithmName}/{functionName}")]
+        [HttpPost("SolveOne{algorithmName}/{functionName}")]
         [ProducesResponseType(200, Type = typeof(double))]
         [ProducesResponseType(400)]
         public IActionResult Solve(string algorithmName, string functionName, [FromBody] SolveInput solveInput)
@@ -43,6 +46,24 @@ namespace System_do_testów_metod_sztucznej_inteligencji.Controllers
         }
 
 
+        [HttpPost("List")]
+        [ProducesResponseType(200, Type = typeof(SolveOutput))]
+        [ProducesResponseType(400)]
+        public IActionResult SolveList( [FromBody]ICollection<SolveInput> solveInputList)
+        {
 
+            var result = _service.LIstOfSolve(solveInputList);
+
+            if (!_generateTextReport.GenerateReport(solveInputList, result))
+                return BadRequest("Nie zapisano raportu txt");
+
+            if (!_generatePDFReport.GenerateReport(solveInputList, result))
+                return BadRequest("Nie zapisano raportu pdf");
+
+
+            return Ok(result);
+
+
+        }
     }
 }

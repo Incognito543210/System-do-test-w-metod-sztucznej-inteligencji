@@ -50,7 +50,7 @@ namespace System_do_testów_metod_sztucznej_inteligencji.Services
         {
             var filePath = _dllService.GetFunctionDllFile(functionName).DllPath;
             object obj = null;
-            var assembly = Assembly.LoadFrom(filePath);
+            var assembly = Assembly.LoadFile(filePath);
             var types = assembly.GetTypes();
             foreach (var type in types)
             {

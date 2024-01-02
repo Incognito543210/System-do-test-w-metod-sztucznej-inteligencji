@@ -11,5 +11,9 @@ namespace Model
         public double[] Parameters { get; set; }
         public double[] Min { get; set; }
         public double[] Max { get; set; }
+
+        public string Algorithm { get; set; }
+        public string Function { get; set; }
+
     }
 }
