@@ -24,8 +24,6 @@ builder.Services.AddScoped<IParamInfoService, ParamInfoService>();
 builder.Services.AddScoped<IDllService, DllService>();
 builder.Services.AddScoped<IDllReader, DllReader>();
 builder.Services.AddScoped<ISolveService,SolveService>();
-builder.Services.AddScoped<IGenerateTextReport, GenerateTextReportService>();
-builder.Services.AddScoped<IGeneratePDFReport, GeneratePDFReportService>();
 
 
 builder.Services.AddDbContext<DataContext>(opt =>

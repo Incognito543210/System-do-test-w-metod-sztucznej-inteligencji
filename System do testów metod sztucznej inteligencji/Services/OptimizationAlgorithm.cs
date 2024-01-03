@@ -9,10 +9,6 @@ namespace System_do_testów_metod_sztucznej_inteligencji.Services
         private readonly Type _type;
         private readonly object _algorithm;
         private readonly ParamInfo[] _paramsInfo;
-        private readonly IGeneratePDFReport _pdfReport;
-        private readonly IGenerateTextReport _generateTextReport;
-        private readonly IStateReader _stateReader;
-        private readonly IStateWriter _stateWriter;
         public OptimizationAlgorithm(object algorithm, Type type)
         {
             _algorithm = algorithm;
@@ -66,38 +62,7 @@ namespace System_do_testów_metod_sztucznej_inteligencji.Services
             get => _paramsInfo;
             set { }
         }
-        public IStateWriter writer
-        {
-            get
-            {
-                return null;
-            }
-            set { }
-        }
-        public IStateReader reader
-        {
-            get
-            {
-                return null;
-            }
-            set { }
-        }
-        public IGenerateTextReport stringReportGenerator
-        {
-            get
-            {
-                return null;
-            }
-            set { }
-        }
-        public IGeneratePDFReport pdfReportGenerator
-        {
-            get
-            {
-                return null;
-            }
-            set { }
-        }
+        
         public double[] XBest
         {
             get

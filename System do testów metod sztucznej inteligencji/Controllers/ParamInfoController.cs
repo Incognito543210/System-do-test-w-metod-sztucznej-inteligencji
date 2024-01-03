@@ -38,26 +38,7 @@ namespace System_do_testów_metod_sztucznej_inteligencji.Controllers
         }
 
 
-        [HttpPost("PotsAlgorithmParameters")]
-        [ProducesResponseType(204)]
-        [ProducesResponseType(500)]
-        public IActionResult PostAlgorithParameters([FromBody]  params double[] parameters)
-        {
-
-            if (parameters == null)
-            {
-                return BadRequest("Wprowadzone nie mogą być puste");
-            }
-
-            if (!ModelState.IsValid)
-            {
-                return BadRequest("Coś poszło nie tak");
-            }
-
-            
-
-            return Ok("Received successfully");
-        }
+    
 
 
     }
