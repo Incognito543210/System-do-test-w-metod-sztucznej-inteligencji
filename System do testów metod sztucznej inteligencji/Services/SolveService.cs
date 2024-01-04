@@ -1,15 +1,20 @@
 ﻿using System.Xml.Linq;
 using System_do_testów_metod_sztucznej_inteligencji.Interfaces;
 using Model;
+using System.Collections.Generic;
 
 namespace System_do_testów_metod_sztucznej_inteligencji.Services
 {
     public class SolveService: ISolveService
     {
         private IDllReader _dllReader;
-        public SolveService(IDllReader dllReader)
+        private IStateWriter _stateWriter;
+        private IStateReader _stateReader;
+        public SolveService(IDllReader dllReader,IStateWriter stateWriter, IStateReader stateReader)
         {
             _dllReader = dllReader;
+            _stateWriter = stateWriter;
+            _stateReader = stateReader;
         }
 
 
@@ -43,9 +48,12 @@ namespace System_do_testów_metod_sztucznej_inteligencji.Services
 
       public ICollection<SolveOutput> LIstOfSolve(ICollection<SolveInput> solveInputs) 
         {
-
-
+           
+            
             List<SolveOutput> resultOfList = new List<SolveOutput>();
+            int iteration = 0;
+            _stateWriter.WriteStateToFile(iteration);
+            _stateWriter.WriteListToFile(solveInputs);
             foreach (var solveInput in solveInputs)
             {
                 double[,] domain = new double[2, solveInput.Min.Length];
@@ -60,14 +68,37 @@ namespace System_do_testów_metod_sztucznej_inteligencji.Services
                 var solveOutput = new SolveOutput(solveInput.Function, result, solveInput.Algorithm);
 
                 resultOfList.Add(solveOutput);
-
+                iteration++;
+                _stateWriter.WriteStateToFile(iteration);
             }
 
+            _stateReader.DelateFiles();
             return resultOfList;
         
         }
 
 
+        public ICollection<SolveInput> Resume()
+        {
+            List<SolveInput> solveInputs = null;
+            if (_stateReader.FilesExist())
+            {
+                int iteration = _stateReader.GetSolveIteration();
+                solveInputs = _stateReader.GetSolveInputs();
+
+                for (int i = 0; i < iteration; i++)
+                {
+                    if (solveInputs.Count > 0)
+                    {
+                        solveInputs.Remove(solveInputs[0]);
+                    }
+                }
+            }
+
+            _stateReader.DelateFiles();
+            return solveInputs;
+
+        }
 
     }
 }

@@ -24,6 +24,8 @@ builder.Services.AddScoped<IParamInfoService, ParamInfoService>();
 builder.Services.AddScoped<IDllService, DllService>();
 builder.Services.AddScoped<IDllReader, DllReader>();
 builder.Services.AddScoped<ISolveService,SolveService>();
+builder.Services.AddScoped<IStateReader, StateReaderService>();
+builder.Services.AddScoped<IStateWriter, StateWriterService>();
 
 
 builder.Services.AddDbContext<DataContext>(opt =>

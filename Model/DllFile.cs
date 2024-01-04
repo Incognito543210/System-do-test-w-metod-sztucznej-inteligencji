@@ -9,5 +9,6 @@ namespace Model
         public string DllName { get; set; }
         public string DllPath { get; set; }
         public string DllType { get; set; }
+        public int DLLDim { get; set; }
     }
 }

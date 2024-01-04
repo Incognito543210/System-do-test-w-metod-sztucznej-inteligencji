@@ -11,11 +11,13 @@ namespace System_do_testów_metod_sztucznej_inteligencji.Controllers
     {
 
         private readonly ISolveService _service;
+        private readonly IStateReader _stateReader;
 
 
-        public SolveController(ISolveService service)
+        public SolveController(ISolveService service, IStateReader stateReader)
         {
             _service = service;
+            _stateReader = stateReader;
         }
 
         [HttpPost("SolveOne{algorithmName}/{functionName}")]
@@ -53,5 +55,43 @@ namespace System_do_testów_metod_sztucznej_inteligencji.Controllers
 
 
         }
+
+        [HttpGet("Resume")]
+        [ProducesResponseType(200, Type = typeof(bool))]
+        [ProducesResponseType(400)]
+        public IActionResult CanResume()
+        {
+            var FilesExists = _stateReader.FilesExist();
+
+            if (!ModelState.IsValid)
+            {
+                return BadRequest(ModelState);
+            }
+
+            return Ok(FilesExists);
+        }
+
+        [HttpPost("Resume")]
+        [ProducesResponseType(200, Type = typeof(SolveOutput))]
+        [ProducesResponseType(400)]
+        public IActionResult DoResume([FromBody] bool doResume)
+        {
+
+            if(doResume)
+            {
+                var result = _service.LIstOfSolve(_service.Resume());
+                return Ok(result);
+            }
+            else
+            {
+                _stateReader.DelateFiles();
+                return Ok("Usunieto pliki");
+            }
+
+            return BadRequest();
+
+            
+        }
+
     }
 }
