@@ -12,7 +12,7 @@ namespace System_do_testów_metod_sztucznej_inteligencji.Services
 
             string projectPath = AppDomain.CurrentDomain.BaseDirectory;
             string folderName = "StateOfList";
-            string fileNameIteration = "StateIteration.txt";
+            string fileNameIteration = "Iteration.txt";
             string fileNameList = "StateSolveList.json";
             string folderPath = Path.Combine(projectPath, folderName);
             string filePathIteration = Path.Combine(folderPath, fileNameIteration);
@@ -52,7 +52,7 @@ namespace System_do_testów_metod_sztucznej_inteligencji.Services
         {
             string projectPath = AppDomain.CurrentDomain.BaseDirectory;
             string folderName = "StateOfList";
-            string fileName = "StateIteration.txt";
+            string fileName = "Iteration.txt";
             string folderPath = Path.Combine(projectPath, folderName);
             string filePath = Path.Combine(folderPath, fileName);
 
@@ -77,11 +77,13 @@ namespace System_do_testów_metod_sztucznej_inteligencji.Services
         {
             string projectPath = AppDomain.CurrentDomain.BaseDirectory;
             string folderName = "StateOfList";
-            string fileNameIteration = "StateIteration.txt";
+            string fileNameIteration = "Iteration.txt";
             string fileNameList = "StateSolveList.json";
+            string fileNameAlgorithState = "State.txt";
             string folderPath = Path.Combine(projectPath, folderName);
             string filePathIteration = Path.Combine(folderPath, fileNameIteration);
             string filePathList = Path.Combine(folderPath, fileNameList);
+            string filePathAlgorithState=Path.Combine(folderPath, fileNameAlgorithState);
 
             if (File.Exists(filePathIteration))
             {
@@ -90,6 +92,10 @@ namespace System_do_testów_metod_sztucznej_inteligencji.Services
             if (File.Exists(filePathList))
             {
                 File.Delete(filePathList);
+            }
+            if(File.Exists(filePathAlgorithState))
+            {
+                File.Delete(filePathAlgorithState);
             }
         }
     }

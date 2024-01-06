@@ -40,6 +40,17 @@ namespace System_do_testów_metod_sztucznej_inteligencji.Controllers
             }
             double []result = _service.Solve(algorithmName, functionName, domain,solveInput.Parameters);
 
+            if (!ModelState.IsValid)
+            {
+                return BadRequest(ModelState);
+            }
+
+
+            if (result == null)
+            {
+                return BadRequest("Coś poszło nie tak");
+            }
+
             return Ok(result);
         }
 
@@ -51,6 +62,15 @@ namespace System_do_testów_metod_sztucznej_inteligencji.Controllers
         {
 
             var result = _service.LIstOfSolve(solveInputList);
+            if (!ModelState.IsValid)
+            {
+                return BadRequest(ModelState);
+            }
+
+            if(result == null)
+            {
+                return BadRequest("Coś poszło nie tak");
+            }
             return Ok(result);
 
 
@@ -88,7 +108,7 @@ namespace System_do_testów_metod_sztucznej_inteligencji.Controllers
                 return Ok("Usunieto pliki");
             }
 
-            return BadRequest();
+            return BadRequest("Coś poszło nie tak");
 
             
         }

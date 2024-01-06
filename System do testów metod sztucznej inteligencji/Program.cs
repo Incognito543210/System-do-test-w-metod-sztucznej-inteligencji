@@ -6,10 +6,6 @@ using System_do_testów_metod_sztucznej_inteligencji.Services;
 
 var builder = WebApplication.CreateBuilder(args);
 
-
-
-
-
 // Add services to the container.
 
 builder.Services.AddControllers();
@@ -35,11 +31,19 @@ builder.Services.AddDbContext<DataContext>(opt =>
 
 
 
+builder.Services.AddCors(opt =>
+{
+    opt.AddPolicy("CorsPolicy", policy =>
+    {
+        policy.AllowAnyHeader().AllowAnyMethod().WithOrigins("http://localhost:3000");
+    });
+});
+
 
 
 
 var app = builder.Build();
-
+app.UseCors("CorsPolicy");
 // Configure the HTTP request pipeline.
 if (app.Environment.IsDevelopment())
 {

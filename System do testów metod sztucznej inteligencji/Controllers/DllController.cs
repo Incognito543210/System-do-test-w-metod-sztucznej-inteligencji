@@ -23,7 +23,7 @@ namespace System_do_testów_metod_sztucznej_inteligencji.Controllers
 
             if(dllFilesCreate == null)
             {
-                return BadRequest("Popraw wprowdzone dane");
+                return BadRequest("Popraw wprowdzone dane, nie mogą być puste");
             }
 
             if(!ModelState.IsValid)
@@ -66,6 +66,7 @@ namespace System_do_testów_metod_sztucznej_inteligencji.Controllers
 
             return Ok(listOfAlgorithm);
         }
+
         [HttpGet("functionList")]
         [ProducesResponseType(200, Type = typeof(IEnumerable<DllFile>))]
         [ProducesResponseType(400)]

@@ -46,7 +46,7 @@ namespace System_do_testów_metod_sztucznej_inteligencji.Services
         {
             string projectPath = AppDomain.CurrentDomain.BaseDirectory;
             string folderName = "StateOfList";
-            string fileName = "StateIteration.txt";
+            string fileName = "Iteration.txt";
             string folderPath = Path.Combine(projectPath, folderName);
             string filePath = Path.Combine(folderPath, fileName);
       

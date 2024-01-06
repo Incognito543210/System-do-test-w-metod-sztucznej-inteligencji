@@ -29,6 +29,12 @@ namespace System_do_testów_metod_sztucznej_inteligencji.Controllers
 
             var paramsInfo = _paramInfoService.GetParamsInfo(name);
 
+
+            if(paramsInfo == null)
+            {
+                return BadRequest("Puste parametry");
+            }
+
             if(!ModelState.IsValid)
             {
                 return BadRequest(ModelState);
