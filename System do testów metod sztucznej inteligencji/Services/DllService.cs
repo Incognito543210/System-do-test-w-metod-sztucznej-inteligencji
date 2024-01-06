@@ -28,6 +28,11 @@ namespace System_do_testów_metod_sztucznej_inteligencji.Services
         {
             return _dataContext.DllFiles.Where(n => n.DllName.ToLower().Trim() == name.ToLower().Trim() && n.DllType.ToLower().Trim() == "funkcja").FirstOrDefault();
         }
+        public DllFile GetDllFile(string name)
+        {
+            return _dataContext.DllFiles.Where(n => n.DllName.ToLower().Trim() == name.ToLower().Trim()).FirstOrDefault();
+        }
+
 
         public ICollection<DllFile> GetAlgorithmFiles()
         {
@@ -61,5 +66,14 @@ namespace System_do_testów_metod_sztucznej_inteligencji.Services
         {
             return _dataContext.DllFiles.Any(n => n.DllType.Trim().ToLower() == "funkcja");
         }
+
+
+        public bool DeleteDLLFile(DllFile dllFile)
+        {
+            _dataContext.Remove(dllFile);
+            return Save();
+        }
+
+
     }
 }

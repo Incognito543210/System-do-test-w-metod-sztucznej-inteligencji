@@ -13,5 +13,7 @@ namespace System_do_testów_metod_sztucznej_inteligencji.Interfaces
         bool AlgorithmExists(string algorithm);
         bool AnyAlgorithmExist();
         bool AnyFunctionExist();
+        DllFile GetDllFile(string name);
+        bool DeleteDLLFile(DllFile dllFile);
     }
 }

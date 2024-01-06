@@ -60,8 +60,13 @@ namespace System_do_testów_metod_sztucznej_inteligencji.Controllers
         [ProducesResponseType(400)]
         public IActionResult SolveList( [FromBody]ICollection<SolveInput> solveInputList)
         {
+            if (solveInputList == null)
+            {
+                return BadRequest("Przesłana lista nie może być pusta");
+            }
 
             var result = _service.LIstOfSolve(solveInputList);
+
             if (!ModelState.IsValid)
             {
                 return BadRequest(ModelState);
@@ -71,6 +76,7 @@ namespace System_do_testów_metod_sztucznej_inteligencji.Controllers
             {
                 return BadRequest("Coś poszło nie tak");
             }
+
             return Ok(result);
 
 
@@ -97,7 +103,13 @@ namespace System_do_testów_metod_sztucznej_inteligencji.Controllers
         public IActionResult DoResume([FromBody] bool doResume)
         {
 
-            if(doResume)
+
+            if (!ModelState.IsValid)
+            {
+                return BadRequest(ModelState);
+            }
+
+            if (doResume)
             {
                 var result = _service.LIstOfSolve(_service.Resume());
                 return Ok(result);
@@ -107,10 +119,9 @@ namespace System_do_testów_metod_sztucznej_inteligencji.Controllers
                 _stateReader.DelateFiles();
                 return Ok("Usunieto pliki");
             }
+          
 
-            return BadRequest("Coś poszło nie tak");
-
-            
+           
         }
 
     }

@@ -41,7 +41,7 @@ namespace System_do_testów_metod_sztucznej_inteligencji.Controllers
                 return BadRequest("Coś poszło nie tak podczas zapisywania");
             }
    
-            return Ok("Received successfully");
+            return Ok("Zapisano plik");
         }
 
   
@@ -86,6 +86,31 @@ namespace System_do_testów_metod_sztucznej_inteligencji.Controllers
 
             return Ok(listOfFunction);
         }
+
+
+
+        [HttpDelete("{DLLName}")]
+        [ProducesResponseType(400)]
+        [ProducesResponseType(204)]
+        [ProducesResponseType(404)]
+        public IActionResult DeleteDLLFile(string DLLName)
+        {
+            if(!_dllService.DllFileExist(DLLName))
+            {
+                return NotFound("Nie ma takiego pliku");
+            }
+            var DllFileToRemove = _dllService.GetDllFile(DLLName);
+
+            if(!_dllService.DeleteDLLFile(DllFileToRemove))
+            {
+                return BadRequest("Coś poszło nie tak z usówaniem");
+            }
+
+            return Ok("Usunięto plik pomyślnie");
+
+
+        }
+
 
     }
 }
