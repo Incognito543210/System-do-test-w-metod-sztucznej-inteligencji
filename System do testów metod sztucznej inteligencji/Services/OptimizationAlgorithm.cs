@@ -35,6 +35,9 @@ namespace System_do_testów_metod_sztucznej_inteligencji.Services
                 PropertyInfo upperBoundaryProperty = paramInfoType.GetProperties().FirstOrDefault(p => p.Name == "UpperBoundary");
                 paramInfo.UpperBoundary = (double)upperBoundaryProperty.GetValue(paramInfoObject);
 
+                PropertyInfo step = paramInfoType.GetProperties().FirstOrDefault(p => p.Name == "Step");
+                paramInfo.Step = (double)step.GetValue(paramInfoObject);
+
                 PropertyInfo lowerBoundaryProperty = paramInfoType.GetProperties().FirstOrDefault(p => p.Name == "LowerBoundary");
                 paramInfo.LowerBoundary = (double)lowerBoundaryProperty.GetValue(paramInfoObject);
 
