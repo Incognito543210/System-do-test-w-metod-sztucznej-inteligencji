@@ -8,7 +8,7 @@ namespace Model
 {
     public class SolveInput
     {
-        public double[] Parameters { get; set; }
+        public string Parameters { get; set; }
         public double[] Min { get; set; }
         public double[] Max { get; set; }
 

@@ -2,6 +2,7 @@ using Microsoft.EntityFrameworkCore;
 using DAL;
 using System_do_testów_metod_sztucznej_inteligencji.Interfaces;
 using System_do_testów_metod_sztucznej_inteligencji.Services;
+using System_do_testów_metod_sztucznej_inteligencji;
 
 
 var builder = WebApplication.CreateBuilder(args);
@@ -16,12 +17,7 @@ builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 
 
-builder.Services.AddScoped<IParamInfoService, ParamInfoService>();
-builder.Services.AddScoped<IDllService, DllService>();
-builder.Services.AddScoped<IDllReader, DllReader>();
-builder.Services.AddScoped<ISolveService,SolveService>();
-builder.Services.AddScoped<IStateReader, StateReaderService>();
-builder.Services.AddScoped<IStateWriter, StateWriterService>();
+builder.Services.AddInjection();
 
 
 builder.Services.AddDbContext<DataContext>(opt =>

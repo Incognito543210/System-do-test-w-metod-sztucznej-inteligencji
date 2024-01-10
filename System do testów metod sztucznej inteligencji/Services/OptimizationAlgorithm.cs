@@ -86,7 +86,9 @@ namespace System_do_testów_metod_sztucznej_inteligencji.Services
         {
             get
             {
-                return 0;
+                PropertyInfo numOfEvaProperty = _type.GetProperties().FirstOrDefault(p => p.Name == "NumberOfEvaluationFitnessFunction");
+                int NumOfEva = (int)numOfEvaProperty.GetValue(_algorithm);
+                return NumOfEva;
             }
             set { }
         }
