@@ -80,8 +80,9 @@ namespace System_do_testów_metod_sztucznej_inteligencji.Controllers
             }
             else
             {
-                _stateReader.DelateCombinationFiles();
-                _stateReader.DelateFiles();
+                _stateReader.DeleteCombinationFiles();
+                _stateReader.DeleteFiles();
+                _stateReader.DeleteResultFile();
                 return Ok("Usunieto pliki");
             }
         }

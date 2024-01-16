@@ -111,15 +111,23 @@ namespace System_do_testów_metod_sztucznej_inteligencji.Services
                     iterationCombination++;
                 }
 
-                
+               
                 iteration++;
                 _stateWriter.WriteStateIterationToFile(iteration, "Iteration.txt");
-                _stateReader.DelateCombinationFiles();
+                _stateReader.DeleteCombinationFiles();
                 
             }
-           
-            _generatePDF.GeneratePdfFile();
-            _stateReader.DelateFiles();
+
+            List<SolveInput>solveInputsList = new List<SolveInput>(solveInputs);
+            if (_generatePDF.IsAutoParameters(solveInputsList))
+            {
+                _generatePDF.GenerateAutoParametersPdfFile();
+            }
+            else
+            {
+                _generatePDF.GeneratePdfFile();
+            }
+            _stateReader.DeleteFiles();
 
             return resultOfList;
         }
@@ -142,7 +150,7 @@ namespace System_do_testów_metod_sztucznej_inteligencji.Services
                 }
             }
 
-            _stateReader.DelateFiles();
+            _stateReader.DeleteFiles();
             return solveInputs;
 
         }
@@ -162,7 +170,7 @@ namespace System_do_testów_metod_sztucznej_inteligencji.Services
                 }
             }
 
-            _stateReader.DelateCombinationFiles();
+            _stateReader.DeleteCombinationFiles();
             return combinations;
 
 

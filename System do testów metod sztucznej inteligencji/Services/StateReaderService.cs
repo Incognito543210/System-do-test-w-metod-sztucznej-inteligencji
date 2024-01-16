@@ -1,6 +1,5 @@
 ﻿using Model;
 using Newtonsoft.Json;
-using System.Collections.Generic;
 using System_do_testów_metod_sztucznej_inteligencji.Interfaces;
 
 namespace System_do_testów_metod_sztucznej_inteligencji.Services
@@ -76,7 +75,7 @@ namespace System_do_testów_metod_sztucznej_inteligencji.Services
             return iteration;
         }
 
-        public void DelateFiles()
+        public void DeleteFiles()
         {
             string projectPath = AppDomain.CurrentDomain.BaseDirectory;
 
@@ -120,7 +119,7 @@ namespace System_do_testów_metod_sztucznej_inteligencji.Services
 
         }
 
-        public void DelateCombinationFiles()
+        public void DeleteCombinationFiles()
         {
             string projectPath = AppDomain.CurrentDomain.BaseDirectory;
 
@@ -218,6 +217,21 @@ namespace System_do_testów_metod_sztucznej_inteligencji.Services
             return exists;
         }
 
+        public void DeleteResultFile()
+        {
+            string projectPath2 = AppDomain.CurrentDomain.BaseDirectory;
 
+            string folderName = "StateOfList";
+            string folderPath = Path.Combine(projectPath2, folderName);
+
+            string fileName = "Result.json";
+            string filePath = Path.Combine(folderPath, fileName);
+
+            if (File.Exists(filePath))
+            {
+                File.Delete(filePath);
+            }
+
+        }
     }
 }

@@ -12,9 +12,10 @@ namespace System_do_testów_metod_sztucznej_inteligencji.Interfaces
 
         List<double[]> ReadCombinationsFromFile();
 
-        void DelateFiles();
-        void DelateCombinationFiles();
+        void DeleteFiles();
+        void DeleteCombinationFiles();
         bool FilesExistCombinations();
+        void DeleteResultFile();
 
 
     }
