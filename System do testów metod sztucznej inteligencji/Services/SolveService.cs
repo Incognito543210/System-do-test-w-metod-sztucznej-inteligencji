@@ -28,8 +28,7 @@ namespace System_do_testów_metod_sztucznej_inteligencji.Services
         {
 
             var kasia = _dllReader.GetTestFunction(functionName);
-            List<object> listOfFunction = new List<object>();
-            listOfFunction.Add(kasia);
+            List<object> listOfFunction = [kasia];
 
             _dllReader.RunSolve(algoritmName,listOfFunction,domain,parametres);
             var optimization = (OptimizationAlgorithm)_dllReader.GetClassObject();

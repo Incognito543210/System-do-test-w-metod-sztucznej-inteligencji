@@ -68,8 +68,6 @@ namespace System_do_testów_metod_sztucznej_inteligencji.Controllers
         [ProducesResponseType(400)]
         public IActionResult DoResume([FromBody] bool doResume)
         {
-
-
             if (!ModelState.IsValid)
             {
                 return BadRequest(ModelState);
@@ -86,10 +84,11 @@ namespace System_do_testów_metod_sztucznej_inteligencji.Controllers
                 _stateReader.DelateFiles();
                 return Ok("Usunieto pliki");
             }
-          
-
-           
         }
+
+        
+
+
 
     }
 }
