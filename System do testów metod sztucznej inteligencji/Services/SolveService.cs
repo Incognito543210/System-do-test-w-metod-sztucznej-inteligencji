@@ -13,14 +13,16 @@ namespace System_do_testów_metod_sztucznej_inteligencji.Services
         private IStateReader _stateReader;
         private IGenerateCombinations _generateCombinations;
         private IGeneratePDF _generatePDF;
+        private IParamInfoService _paramInfoService;
 
-        public SolveService(IDllReader dllReader,IStateWriter stateWriter, IStateReader stateReader, IGenerateCombinations generateCombinations, IGeneratePDF generatePDF)
+        public SolveService(IDllReader dllReader,IStateWriter stateWriter, IStateReader stateReader, IGenerateCombinations generateCombinations, IGeneratePDF generatePDF, IParamInfoService paramInfoService)
         {
             _dllReader = dllReader;
             _stateWriter = stateWriter;
             _stateReader = stateReader;
             _generateCombinations = generateCombinations;
             _generatePDF = generatePDF;
+            _paramInfoService = paramInfoService;
         }
 
 
@@ -33,8 +35,8 @@ namespace System_do_testów_metod_sztucznej_inteligencji.Services
             _dllReader.RunSolve(algoritmName,listOfFunction,domain,parametres);
             var optimization = (OptimizationAlgorithm)_dllReader.GetClassObject();
 
-            double[] result = new double[domain.GetLength(0)+1];
-
+            double[] result = new double[domain.GetLength(1)+1];
+            int k = domain.GetLength(0);
 
 
             result[0] = optimization.FBest;
@@ -64,6 +66,22 @@ namespace System_do_testów_metod_sztucznej_inteligencji.Services
             {
                 double[,] parametersFromConvert = JsonConvert.DeserializeObject<double[,]>(solveInput.Parameters);
                 double[,] domain = new double[2, solveInput.Min.Length];
+
+                if (parametersFromConvert.GetType() == typeof(double[,]) && parametersFromConvert.GetLength(0) == 0 && parametersFromConvert.GetLength(1) == 0)
+                {
+                   ICollection <ParamInfo> paramsCollection = _paramInfoService.GetParamsInfo(solveInput.Algorithm);
+                    List<ParamInfo> paramsList = paramsCollection.ToList();
+
+                    parametersFromConvert = new double[3, paramsList.Count];
+                    for (int i = 0; i < paramsList.Count; i++)
+                    {
+                        parametersFromConvert[i, 0] = paramsList[i].LowerBoundary;
+                        parametersFromConvert[i, 1] = paramsList[i].UpperBoundary;
+                        parametersFromConvert[i, 2] = paramsList[i].Step;
+                    }
+                }
+
+
 
                 for (int i = 0; i < solveInput.Min.Length; i++)
                 {
