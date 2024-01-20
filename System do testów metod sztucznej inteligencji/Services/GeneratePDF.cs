@@ -28,6 +28,17 @@ namespace System_do_testów_metod_sztucznej_inteligencji.Services
         {
 
             string projectPath = AppDomain.CurrentDomain.BaseDirectory;
+            string folderNamePDF = "Raporty";
+            string folderPathPDF = Path.Combine(projectPath, folderNamePDF);
+
+            if (!Directory.Exists(folderPathPDF))
+            {
+                Directory.CreateDirectory(folderPathPDF);
+            }
+
+           
+
+
 
 
             DateTime now = DateTime.Now;
@@ -35,8 +46,6 @@ namespace System_do_testów_metod_sztucznej_inteligencji.Services
 
             //PDF File path
             string fileNamePDF = $"Raport Auto Parameters +{currentDateTimeString}.pdf";
-            string folderNamePDF = "PDFRaports";
-            string folderPathPDF = Path.Combine(projectPath, folderNamePDF);
             string filePathPDF = Path.Combine(folderPathPDF, fileNamePDF);
 
             //Soruce for pdf path
@@ -144,15 +153,19 @@ namespace System_do_testów_metod_sztucznej_inteligencji.Services
         public void GeneratePdfFile()
         {
             string projectPath = AppDomain.CurrentDomain.BaseDirectory;
+            string folderNamePDF = "Raporty";
+            string folderPathPDF = Path.Combine(projectPath, folderNamePDF);
 
-            
+            if (!Directory.Exists(folderPathPDF))
+            {
+                Directory.CreateDirectory(folderPathPDF);
+            }
+
             DateTime now = DateTime.Now;
             string currentDateTimeString = now.ToString("yyyy-MM-dd-HH-mm-ss");
 
             //PDF File path
             string fileNamePDF = $"Raport +{currentDateTimeString}.pdf";
-            string folderNamePDF = "PDFRaports";
-            string folderPathPDF = Path.Combine(projectPath, folderNamePDF);
             string filePathPDF = Path.Combine(folderPathPDF, fileNamePDF);
 
             //Soruce for pdf path
