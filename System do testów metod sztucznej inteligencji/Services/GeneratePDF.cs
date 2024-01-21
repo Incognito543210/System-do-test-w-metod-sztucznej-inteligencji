@@ -11,6 +11,11 @@ namespace System_do_testów_metod_sztucznej_inteligencji.Services
 
         public bool IsAutoParameters(List<SolveInput> solveInputs)
         {
+            if(solveInputs.Count < 2)
+            {
+                return false;
+            }
+
             string firstNameofAlgorithm = solveInputs.First().Algorithm.Trim().ToLower();
             string secondNameofAlgorithm = solveInputs[1].Algorithm.Trim().ToLower();
 
